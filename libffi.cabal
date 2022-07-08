@@ -20,5 +20,3 @@ exposed-modules:    Foreign.LibFFI,
                     Foreign.LibFFI.FFITypes,
                     Foreign.LibFFI.Internal
 pkgconfig-depends: libffi
-extra-libraries:    ffi
-includes:           ffi.h ffitarget.h
