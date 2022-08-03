@@ -18,6 +18,11 @@ source-repository head
   type:                git
   location:            https://github.com/RyanGlScott/libffi
 
+flag static
+  description:      Force static linking against @libffi@
+  default:          False
+  manual:           True
+
 library
   build-depends:      base >= 3 && < 5, bytestring
   exposed-modules:    Foreign.LibFFI,
@@ -25,6 +30,8 @@ library
                       Foreign.LibFFI.Types,
                       Foreign.LibFFI.FFITypes,
                       Foreign.LibFFI.Internal
-  pkgconfig-depends:  libffi
-  extra-libraries:    ffi
-  includes:           ffi.h ffitarget.h
+  if flag(static)
+    cc-options:        -Wl,-Bstatic -lffi -Wl,-Bdynamic
+    includes:          ffi.h ffitarget.h
+  else
+    pkgconfig-depends: libffi
