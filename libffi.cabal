@@ -20,8 +20,7 @@ source-repository head
 
 flag static
   description:      Force static linking against @libffi@
-  default:          False
-  manual:           True
+  default:          True
 
 library
   build-depends:      base >= 3 && < 5, bytestring
@@ -33,5 +32,10 @@ library
   if flag(static)
     cc-options:        -Wl,-Bstatic -lffi -Wl,-Bdynamic
     includes:          ffi.h ffitarget.h
+    if os(darwin)
+      -- libffi already gets statically linked on Darwin when building an
+      -- executable and -Bstatic isn't supported by the linker, so we disable
+      -- the static flag.
+      build-depends:  base < 0 && > 0
   else
     pkgconfig-depends: libffi
